@@ -1,5 +1,5 @@
-# this app allows filtering raw data.
-# it loads the raw data, applies a bandpass filter to it using the parameters specified in the config.json file
+# this app allows filtering epoched data.
+# it loads the epoched data, applies a bandpass filter to it using the parameters specified in the config.json file
 # it then saves the filtered data and plots the filter response
 # it also saves a report of the filtered data
 
@@ -21,10 +21,10 @@ with open('config.json','r') as config_f:
 
 # == LOAD DATA ==
 fname = config['mne']
-raw = mne.io.read_raw_fif(fname, preload=True)
-raw_orig = raw.copy()
-sfreq = raw.info['sfreq']
-f = mne.filter.create_filter(raw_orig.get_data(),
+epo = mne.read_epochs(fname, preload=True)
+epo_orig = epo.copy()
+sfreq = epo.info['sfreq']
+f = mne.filter.create_filter(epo_orig.get_data(),
                              sfreq,
                              l_freq=config['l_freq'],
                              h_freq=config['h_freq'],
@@ -42,7 +42,7 @@ fig=plot_filter(f,sfreq)
 plt.savefig(os.path.join('out_figs','filter_response.png'))
 
 
-raw.filter(l_freq=config['l_freq'],
+epo.filter(l_freq=config['l_freq'],
            h_freq=config['h_freq'],
            picks=config['picks'], 
            filter_length=config['filter_length'],
@@ -61,11 +61,11 @@ report = mne.Report(title='Filtering report')
 
 report.add_figure(fig, title='Filter')
 
-report.add_raw(raw_orig, 'Original unfiltered data', psd=True)
+report.add_epochs(epo_orig, 'Original unfiltered data', psd=True)
 
-report.add_raw(raw, 'Filtered data', psd=True)
+report.add_epochs(epo, 'Filtered data', psd=True)
 
 report.save('out_report/report_filter.html', overwrite=True)
 
 
-raw.save('out_dir/meg.fif',overwrite=True)
+epo.save('out_dir/meg.fif',overwrite=True)
