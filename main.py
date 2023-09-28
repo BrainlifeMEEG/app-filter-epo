@@ -40,7 +40,7 @@ f = mne.filter.create_filter(epo_orig.get_data(),
 
 plt.figure()
 fig=plot_filter(f,sfreq)
-plt.savefig(os.path.join('out_figs','filter_response.png'))
+plt.savefig(os.path.join('out_dir_figs','filter_response.png'))
 
 if config['notch']:
     config['notch'] = [int(x) for x in re.split("\\W+",config['notch'])]
