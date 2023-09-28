@@ -21,7 +21,7 @@ with open('config.json','r') as config_f:
     config = helper.convert_parameters_to_None(json.load(config_f))
 
 # == LOAD DATA ==
-fname = config['mne']
+fname = config['epo']
 epo = mne.read_epochs(fname, preload=True)
 epo_orig = epo.copy()
 sfreq = epo.info['sfreq']
