@@ -72,4 +72,4 @@ report.add_epochs(epo, 'Filtered data', psd=True)
 report.save('out_dir_report/report_filter.html', overwrite=True)
 
 
-epo.save('out_dir/meg.fif',overwrite=True)
+epo.save('out_dir/meg-epo.fif',overwrite=True)
